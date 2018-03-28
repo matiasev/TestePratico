@@ -23,6 +23,5 @@ namespace TestePratico.Models
         public string ApplicationUserID { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
-
     }
 }

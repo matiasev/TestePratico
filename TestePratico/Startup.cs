@@ -32,7 +32,6 @@ namespace TestePratico
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-
             services.AddMvc();
         }
 

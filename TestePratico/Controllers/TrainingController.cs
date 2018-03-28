@@ -24,7 +24,7 @@ namespace TestePratico.Controllers
             _context = context;
         }
 
-       
+
         public async Task<IActionResult> Index()
         {
             if (User.IsInRole("Admin"))
@@ -42,10 +42,8 @@ namespace TestePratico.Controllers
 
                 return View(await applicationDbContext.ToListAsync());
             }
-
         }
 
-        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -104,7 +102,7 @@ namespace TestePratico.Controllers
             return View(training);
         }
 
-       
+
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
@@ -158,7 +156,7 @@ namespace TestePratico.Controllers
             return View(training);
         }
 
-       
+
         [HttpPost, ActionName("Delete")]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]

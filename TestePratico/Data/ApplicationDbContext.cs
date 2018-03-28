@@ -19,7 +19,6 @@ namespace TestePratico.Data
         //Representa a coleção de todas as entidades no contexto.
         public DbSet<Training> Trainings { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
