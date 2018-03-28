@@ -1,0 +1,62 @@
+﻿@model IEnumerable<TestePratico.Models.Training>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+@if (User.IsInRole("Admin"))
+{
+<p class="lead">
+    <a class="btn btn-primary btn-lg" role="button" asp-area="" asp-controller="Account" asp-action="Register">Add Player</a>
+    <a class="btn btn-info btn-lg" role="button" asp-action="Create">Add Training</a>
+</p>
+
+    
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeTraining)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataTraining)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationUser)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeTraining)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataTraining)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicationUser.Name)
+                </td>
+                <td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.TrainingID">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.TrainingID">Delete</a>
+                    }
+
+
+                    <a asp-action="Details" asp-route-id="@item.TrainingID">Details</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,41 @@
+﻿@model TestePratico.Models.Training
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Training</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TimeTraining)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TimeTraining)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DataTraining)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DataTraining)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.TrainingID">Edit</a>
+    }
+
+    <a asp-action="Index">Back to List</a>
+</div>
