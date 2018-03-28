@@ -260,7 +260,6 @@ paket-files/
 __pycache__/
 *.pyc
 
-TestePratico/Migrations
 TestePratico/bin/
 TestePratico/obj/
 TestePratico/bower_components/
