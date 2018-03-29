@@ -26,13 +26,27 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Training" asp-action="Index" class="navbar-brand">App</a>
+                @if (User.IsInRole("Admin") || User.IsInRole("User"))
+                {
+                    <a asp-area="" asp-controller="Training" asp-action="Index" class="navbar-brand">Training App</a>
+                }
+                else
+                {
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Training App</a>
+
+                }
+
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @if (User.IsInRole("Admin") || User.IsInRole("User"))
                     {
-                        <li><a asp-area="" asp-controller="Training" asp-action="Index">Training</a></li>
+                        <li class="nav-item"><a asp-area="" asp-controller="Training" asp-action="Index">Training</a></li>
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item"><a asp-area="" asp-controller="Training" asp-action="Create">Add Training</a></li>
+
                     }
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")

@@ -10,14 +10,16 @@ namespace TestePratico.Models
         public int TrainingID { get; set; }
 
         [DataType(DataType.Time)]
-        public TimeSpan TimeTraining { get; set; }
+        public TimeSpan Time { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime DataTraining { get; set; }
+        public DateTime Date { get; set; }
 
-        public string ApplicationUserID { get; set; }
+        public string CoachID { get; set; }
+        public string PlayerID { get; set; }
 
-        public ApplicationUser ApplicationUser { get; set; }
+        public ApplicationUser Coach { get; set; }
+        public ApplicationUser Player { get; set; }
     }
 }

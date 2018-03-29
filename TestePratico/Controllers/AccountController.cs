@@ -30,8 +30,8 @@ namespace TestePratico.Controllers
             _logger = logger;
         }
 
-        [TempData]
-        public string ErrorMessage { get; set; }
+        //[TempData]
+        //public string ErrorMessage { get; set; }
 
         [HttpGet]
         [AllowAnonymous]
@@ -84,39 +84,60 @@ namespace TestePratico.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var verifyUser = await _userManager.GetUserAsync(User);
-
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    if (verifyUser == null)
+                    if (!await _roleManager.RoleExistsAsync("Admin"))
                     {
-                        if (!await _roleManager.RoleExistsAsync("Admin"))
-                        {
-                            var users = new IdentityRole("Admin");
-                            var res = await _roleManager.CreateAsync(users);
-                        }
-
-                        await _userManager.AddToRoleAsync(user, "Admin");
-
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        _logger.LogInformation("User created a new account with password.");
-                        return RedirectToLocal(returnUrl);
+                        var users = new IdentityRole("Admin");
+                        var res = await _roleManager.CreateAsync(users);
                     }
-                    else
+
+                    await _userManager.AddToRoleAsync(user, "Admin");
+
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    _logger.LogInformation("User created a new account with password.");
+                    return RedirectToLocal(returnUrl);
+                }
+
+                AddErrors(result);
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult RegisterPlayer(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterPlayer(RegisterViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    if (!await _roleManager.RoleExistsAsync("User"))
                     {
-                        if (!await _roleManager.RoleExistsAsync("User"))
-                        {
-                            var users = new IdentityRole("User");
-                            var res = await _roleManager.CreateAsync(users);
-                        }
-
-                        await _userManager.AddToRoleAsync(user, "User");
-                        _logger.LogInformation("User created a new account with password.");
-                        return RedirectToLocal(returnUrl);
-
+                        var users = new IdentityRole("User");
+                        var res = await _roleManager.CreateAsync(users);
                     }
+
+                    await _userManager.AddToRoleAsync(user, "User");
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    _logger.LogInformation("User created a new account with password.");
+                    return RedirectToLocal(returnUrl);
+
                 }
 
                 AddErrors(result);

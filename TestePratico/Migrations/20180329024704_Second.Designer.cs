@@ -11,9 +11,10 @@ using TestePratico.Data;
 namespace TestePratico.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180329024704_Second")]
+    partial class Second
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -208,19 +209,19 @@ namespace TestePratico.Migrations
                     b.Property<int>("TrainingID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CoachID");
+                    b.Property<string>("ApplicationAdminID");
 
-                    b.Property<DateTime>("Date");
+                    b.Property<string>("ApplicationUserID");
 
-                    b.Property<string>("PlayerID");
+                    b.Property<DateTime>("DataTraining");
 
-                    b.Property<TimeSpan>("Time");
+                    b.Property<TimeSpan>("TimeTraining");
 
                     b.HasKey("TrainingID");
 
-                    b.HasIndex("CoachID");
+                    b.HasIndex("ApplicationAdminID");
 
-                    b.HasIndex("PlayerID");
+                    b.HasIndex("ApplicationUserID");
 
                     b.ToTable("Trainings");
                 });
@@ -272,13 +273,13 @@ namespace TestePratico.Migrations
 
             modelBuilder.Entity("TestePratico.Models.Training", b =>
                 {
-                    b.HasOne("TestePratico.Models.ApplicationUser", "Coach")
+                    b.HasOne("TestePratico.Models.ApplicationUser", "ApplicationAdmin")
                         .WithMany()
-                        .HasForeignKey("CoachID");
+                        .HasForeignKey("ApplicationAdminID");
 
-                    b.HasOne("TestePratico.Models.ApplicationUser", "Player")
+                    b.HasOne("TestePratico.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("PlayerID");
+                        .HasForeignKey("ApplicationUserID");
                 });
 #pragma warning restore 612, 618
         }

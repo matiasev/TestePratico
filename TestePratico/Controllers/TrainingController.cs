@@ -27,7 +27,12 @@ namespace TestePratico.Controllers
         {
             if (User.IsInRole("Admin"))
             {
-                var applicationDbContext = _context.Trainings.Include(t => t.ApplicationUser);
+                var user = await _userManager.GetUserAsync(User);
+                var applicationDbContext = _context.Trainings
+                    .Include(t => t.Player)
+                    .Include(a => a.Coach)
+                    .Where(a => a.CoachID == user.Id);
+
                 return View(await applicationDbContext.ToListAsync());
             }
             else
@@ -35,8 +40,9 @@ namespace TestePratico.Controllers
                 //Utiliza expreção lambda para obter apenas treinos referentes ao Id do usuario logado
                 var user = await _userManager.GetUserAsync(User);
                 var applicationDbContext = _context.Trainings
-                    .Include(t => t.ApplicationUser)
-                    .Where(x => x.ApplicationUserID == user.Id);
+                    .Include(t => t.Player)
+                    .Include(a => a.Coach)
+                    .Where(x => x.PlayerID == user.Id);
 
                 return View(await applicationDbContext.ToListAsync());
             }
@@ -50,7 +56,8 @@ namespace TestePratico.Controllers
             }
 
             var training = await _context.Trainings
-                .Include(t => t.ApplicationUser)
+                .Include(t => t.Player)
+                .Include(a => a.Coach)
                 .SingleOrDefaultAsync(m => m.TrainingID == id);
             if (training == null)
             {
@@ -63,7 +70,8 @@ namespace TestePratico.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            ViewData["ApplicationUserID"] = new SelectList(_userManager.GetUsersInRoleAsync("User").Result, "Id", "Name");
+            ViewData["Coach"] = new SelectList(_userManager.GetUsersInRoleAsync("Admin").Result, "Id", "Name");
+            ViewData["Player"] = new SelectList(_userManager.GetUsersInRoleAsync("User").Result, "Id", "Name");
             return View();
         }
 
@@ -71,15 +79,18 @@ namespace TestePratico.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TrainingID,TimeTraining,DataTraining,ApplicationUserID")] Training training)
+        public async Task<IActionResult> Create([Bind("TrainingID,Time,Date,PlayerID")] Training training)
         {
             if (ModelState.IsValid)
             {
+                var user = await _userManager.GetUserAsync(User);
+                training.CoachID = user.Id;
                 _context.Add(training);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationUserID"] = new SelectList(_userManager.GetUsersInRoleAsync("User").Result, "Id", "Name", training.ApplicationUserID);
+            ViewData["Coach"] = new SelectList(_userManager.GetUsersInRoleAsync("Admin").Result, "Id", "Name", training.CoachID);
+            ViewData["Player"] = new SelectList(_userManager.GetUsersInRoleAsync("User").Result, "Id", "Name", training.PlayerID);
             return View(training);
         }
 
@@ -96,7 +107,8 @@ namespace TestePratico.Controllers
             {
                 return NotFound();
             }
-            ViewData["ApplicationUserID"] = new SelectList(_userManager.GetUsersInRoleAsync("User").Result, "Id", "Name", training.ApplicationUserID);
+            ViewData["Coach"] = new SelectList(_userManager.GetUsersInRoleAsync("Admin").Result, "Id", "Name", training.CoachID);
+            ViewData["Player"] = new SelectList(_userManager.GetUsersInRoleAsync("User").Result, "Id", "Name", training.PlayerID);
             return View(training);
         }
 
@@ -104,7 +116,7 @@ namespace TestePratico.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TrainingID,TimeTraining,DataTraining,ApplicationUserID")] Training training)
+        public async Task<IActionResult> Edit(int id, [Bind("TrainingID,Time,Date,PlayerID")] Training training)
         {
             if (id != training.TrainingID)
             {
@@ -115,6 +127,8 @@ namespace TestePratico.Controllers
             {
                 try
                 {
+                    var user = await _userManager.GetUserAsync(User);
+                    training.CoachID = user.Id;
                     _context.Update(training);
                     await _context.SaveChangesAsync();
                 }
@@ -131,7 +145,8 @@ namespace TestePratico.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationUserID"] = new SelectList(_userManager.GetUsersInRoleAsync("User").Result, "Id", "Name", training.ApplicationUserID);
+            ViewData["Coach"] = new SelectList(_userManager.GetUsersInRoleAsync("Admin").Result, "Id", "Name", training.CoachID);
+            ViewData["Player"] = new SelectList(_userManager.GetUsersInRoleAsync("User").Result, "Id", "Name", training.PlayerID);
             return View(training);
         }
 
@@ -144,7 +159,8 @@ namespace TestePratico.Controllers
             }
 
             var training = await _context.Trainings
-                .Include(t => t.ApplicationUser)
+                .Include(t => t.Player)
+                .Include(a => a.Coach)
                 .SingleOrDefaultAsync(m => m.TrainingID == id);
             if (training == null)
             {
