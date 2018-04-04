@@ -1,0 +1,36 @@
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+      <h1 class="display-4">{{title}}</h1>
+  </div>
+</div>
+
+<div>
+  <button (click)="goBack()" type="button" class="btn btn-default">
+      <i class="material-icons">keyboard_return</i>
+  </button>
+</div>
+<hr />
+<div class="container">
+<form (ngSubmit)='register()'>
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name" placeholder="Enter name" [(ngModel)]="model.name" name="name">
+  </div>
+  <div class="form-group">
+    <label for="email">Email address</label>
+    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" [(ngModel)]="model.email" name="email">
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" class="form-control" id="password" placeholder="Password" [(ngModel)]="model.password" name="password">
+  </div>
+  <div class="form-group">
+    <label for="confirmPassword">Confirm Password</label>
+    <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" [(ngModel)]="model.confirmPassword" name="confirmPassword">
+  </div>
+  <div *ngIf="error" class="alert alert-danger" role="alert">
+    {{error}}
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>
