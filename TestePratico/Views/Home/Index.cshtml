@@ -3,13 +3,9 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1 class="display-4">Hello!</h1>
-    <p class="lead">
-        <a class="btn btn-primary btn-lg" role="button" asp-area="" asp-controller="Account" asp-action="Register">Sou Coach</a>
-        <a class="btn btn-primary btn-lg" role="button" asp-area="" asp-controller="Account" asp-action="RegisterPlayer">Sou Player</a>
-    </p>
-</div>
+<app asp-prerender-module="Client/dist/main-server">Loading...</app>
 
-
-    
+<script src="~/dist/vendor.js" asp-append-version="true"></script>
+@section scripts {
+    <script src="~/dist/main-client.js" asp-append-version="true"></script>
+}

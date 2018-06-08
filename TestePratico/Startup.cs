@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TestePratico.Data;
 using TestePratico.Models;
+using Microsoft.AspNetCore.SpaServices.Webpack;
 
 namespace TestePratico
 {
@@ -24,9 +25,9 @@ namespace TestePratico
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            //services.AddIdentity<ApplicationUser, IdentityRole>()
+            //    .AddEntityFrameworkStores<ApplicationDbContext>()
+            //    .AddDefaultTokenProviders();
 
             services.AddMvc();
         }
@@ -35,14 +36,17 @@ namespace TestePratico
         {
             if (env.IsDevelopment())
             {
-                app.UseBrowserLink();
+                //app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                {
+                    HotModuleReplacement = true
+                });
             }
 
-            app.UseStaticFiles();
+            app.UseStaticFiles(); 
 
-            app.UseAuthentication();
+            //app.UseAuthentication();
 
             //Manipula as rotas
             app.UseMvc(routes =>
@@ -50,6 +54,10 @@ namespace TestePratico
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Home", action = "Index" });
             });
         }
     }

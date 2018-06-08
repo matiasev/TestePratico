@@ -30,8 +30,7 @@ namespace TestePratico.Controllers
             _logger = logger;
         }
 
-        //[TempData]
-        //public string ErrorMessage { get; set; }
+        
 
         [HttpGet]
         [AllowAnonymous]
@@ -54,7 +53,7 @@ namespace TestePratico.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect("/training");
+                    return RedirectToLocal(returnUrl);
                 }
 
                 else
@@ -179,7 +178,7 @@ namespace TestePratico.Controllers
             }
             else
             {
-                return LocalRedirect("/training");
+                return RedirectToAction(nameof(TrainingController.Index), "Training");
             }
         }
 

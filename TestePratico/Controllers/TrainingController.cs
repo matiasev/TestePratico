@@ -22,7 +22,7 @@ namespace TestePratico.Controllers
             _context = context;
         }
 
-
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             if (User.IsInRole("Admin"))
@@ -47,6 +47,7 @@ namespace TestePratico.Controllers
                 return View(await applicationDbContext.ToListAsync());
             }
         }
+
 
         public async Task<IActionResult> Details(int? id)
         {

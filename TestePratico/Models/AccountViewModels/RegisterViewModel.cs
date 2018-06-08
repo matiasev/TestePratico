@@ -8,9 +8,6 @@ namespace TestePratico.Models.AccountViewModels
 {
     public class RegisterViewModel
     {
-        [Key]
-        public int UserId { get; set; }
-
         [Required]
         [Display(Name = "Name")]
         public string Name { get; set; }
